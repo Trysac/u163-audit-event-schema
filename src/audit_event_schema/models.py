@@ -8,7 +8,7 @@ import logging
 import re
 import uuid
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from types import MappingProxyType
 from typing import Any, Literal
@@ -113,7 +113,7 @@ class AuditEvent:
     reason: str | None = None
     source_ip: str | None = None
     request_id: str | None = None
-    attributes: Mapping[str, AttributeValue] = MappingProxyType({})
+    attributes: Mapping[str, AttributeValue] = field(default_factory=lambda: MappingProxyType({}))
     schema_version: SchemaVersion = "1.0"
 
     def __post_init__(self) -> None:
