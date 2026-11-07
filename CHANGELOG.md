@@ -9,4 +9,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add strict AuditEvent model, validation, canonical JSON serialization, and JSON Schema 2020-12 definition.
 - Initial project structure from the factory utility template.

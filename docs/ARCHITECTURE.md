@@ -1,29 +1,11 @@
 # Architecture
 
-## Purpose
+`trysac-audit-event-schema` provides a strict model and canonical serialization format for single audit events.
 
-`trysac-audit-event-schema` is a small, dependency-free Python library: A strict audit event model with canonical JSON: who did what to which target with what outcome, validated fields, UTC millisecond time and a refusal of secret attributes
+## Structure
 
-## Shape
-
-```text
-caller code --> audit_event_schema (public API in __init__.py)
-                    |
-                    +-- pure functions, no I/O, no global state
-```
-
-- **Public API**: the names listed in `__all__` of `src/audit_event_schema/__init__.py`. Anything else is
-  internal and may change without a major version.
-- **Errors**: invalid input raises built-in exceptions (`ValueError`, `TypeError`) with a clear
-  message; the library never prints or exits.
-- **Side effects**: none. If a feature needs I/O, isolate it in its own module behind a small
-  interface and record the choice in an ADR.
-
-## Quality contract
-
-`scripts/check.py` is the single definition of the gates; `fabrica.json` tells the factory and CI
-how to run it. See [TESTING.md](TESTING.md).
-
-## Decisions
-
-Architecture decisions are recorded in [decisions/](decisions/) as numbered ADRs.
+- `audit_event_schema.errors`: Defines `AuditEventError` with specific `ErrorCode` enumeration. Error messages include field paths and rule violations without echoing untrusted values.
+- `audit_event_schema.models`: Frozen dataclasses `Actor`, `Target`, and `AuditEvent` implementing validation rules in `__post_init__`.
+- `new_event()`: Factory injecting clocks and ID generators.
+- `to_json()` / `from_json()`: Deterministic JSON serialization and deserialization with size and depth protection.
+- `JSON_SCHEMA`: Draft 2020-12 schema object matching library invariants.
